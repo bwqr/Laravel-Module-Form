@@ -99,7 +99,7 @@ class FormController extends Controller
     {
         $applied_form = AppliedForm::findOrFail($applied_form_id);
 
-        if(!array_key_exists($field_name, $applied_form->values)) {
+        if (!array_key_exists($field_name, $applied_form->values)) {
             abort(404);
         }
 
