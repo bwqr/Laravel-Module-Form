@@ -11,10 +11,10 @@ Route::post('form', 'FormController@postForm');
 Route::put('form/{form_id}', 'FormController@putForm');
 Route::delete('form/{form_id}', 'FormController@deleteForm');
 
-Route::get('applied-forms/', 'FormController@getAppliedForms');
+Route::get('applied-forms', 'FormController@getAppliedForms');
 Route::get('applied-forms/paginate', 'FormController@getAppliedFormsPaginate');
 Route::get('applied-form/{applied_form_id}', 'FormController@getAppliedForm');
 Route::delete('applied-form/{applied_form_id}', 'FormController@deleteAppliedForm');
 
-Route::get('applied-form-read/{id}', 'FormController@setFormRead');
+Route::get('applied-form-read/{applied_form_id}', 'FormController@setFormRead');
 Route::get('applied-form-file/{applied_form_id}/{field_name}', 'FormController@getAppliedFormFile');

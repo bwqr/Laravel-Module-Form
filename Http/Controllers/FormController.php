@@ -5,8 +5,10 @@ namespace App\Modules\Form\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Modules\Core\Language;
 use App\Modules\Form\AppliedForm;
 use App\Modules\Form\Form;
+use Illuminate\Support\Facades\Storage;
 
 class FormController extends Controller
 {
@@ -17,7 +19,7 @@ class FormController extends Controller
 
     public function getForms()
     {
-        return Form::with('language')->orderBy('slug')->all();
+        return Form::with('language')->orderBy('slug')->get();
     }
 
     public function getFormsPaginate()
@@ -32,12 +34,12 @@ class FormController extends Controller
 
     public function getFormAppliedForms($form_id)
     {
-        return Form::with('appliedForms')->findOrFail($form_id)->applied_forms;
+        return Form::with('appliedForms')->findOrFail($form_id)->appliedForms;
     }
 
     public function getFormAppliedFormsPaginate($form_id)
     {
-        return Form::findOrFail($form_id)->applied_forms()->paginate(request()->input('per-page') ?? 20);
+        return Form::findOrFail($form_id)->appliedForms()->paginate(request()->input('per-page') ?? 20);
     }
 
     public function postForm()
@@ -58,7 +60,19 @@ class FormController extends Controller
 
     public function putForm($form_id)
     {
+        request()->validate([
+            'name' => 'required',
+            'slug' => 'required',
+            'language_id' => 'required'
+        ]);
 
+        $form = Form::findOrFail($form_id);
+
+        $language = Language::findOrFail(request()->input('language_id'));
+
+        $form->update(request()->only(['name', 'slug', 'language_id']));
+
+        return response()->json();
     }
 
     public function deleteForm($form_id)
@@ -70,7 +84,7 @@ class FormController extends Controller
 
     public function getAppliedForms()
     {
-        return AppliedForm::with('form')->all();
+        return AppliedForm::with('form')->get();
     }
 
     public function getAppliedForm($id)
@@ -87,24 +101,24 @@ class FormController extends Controller
     {
         AppliedForm::findOrFail($applied_form_id)->delete();
 
-        return response()->json([]);
+        return response()->json();
     }
 
-    public function setFormRead($id)
+    public function setFormRead($applied_form_id)
     {
-        AppliedForm::findOrFail($id)->update(['is_read' => 1]);
+        AppliedForm::findOrFail($applied_form_id)->update(['is_read' => 1]);
     }
 
     public function getAppliedFormFile($applied_form_id, $field_name)
     {
         $applied_form = AppliedForm::findOrFail($applied_form_id);
 
-        if(!array_key_exists($field_name, $applied_form->values)) {
+        if (!array_key_exists($field_name, $applied_form->values)) {
             abort(404);
         }
 
-        $file_path = "app/forms/{$applied_form->id}/{$applied_form->values[$field_name]}";
+        $file_path = Storage::disk('local')->path("forms/{$applied_form->id}/{$applied_form->values[$field_name]}");
 
-        return response()->file(storage_path($file_path));
+        return response()->file($file_path);
     }
 }
