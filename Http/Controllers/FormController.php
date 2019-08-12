@@ -34,12 +34,14 @@ class FormController extends Controller
 
     public function getFormAppliedForms($form_id)
     {
-        return Form::with('appliedForms')->findOrFail($form_id)->appliedForms;
+        return Form::with(['appliedForms' => function ($query) {
+            $query->orderBy('created_at', 'DESC');
+        }])->findOrFail($form_id)->appliedForms;
     }
 
     public function getFormAppliedFormsPaginate($form_id)
     {
-        return Form::findOrFail($form_id)->appliedForms()->paginate(request()->input('per-page') ?? 20);
+        return Form::findOrFail($form_id)->appliedForms()->orderBy('created_at', 'DESC')->paginate(request()->input('per-page') ?? 20);
     }
 
     public function postForm()
@@ -84,7 +86,7 @@ class FormController extends Controller
 
     public function getAppliedForms()
     {
-        return AppliedForm::with('form')->get();
+        return AppliedForm::with('form')->latest()->get();
     }
 
     public function getAppliedForm($id)
@@ -94,7 +96,7 @@ class FormController extends Controller
 
     public function getAppliedFormsPaginate()
     {
-        return AppliedForm::with('form')->paginate(request()->input('per-page') ?? 20);
+        return AppliedForm::with('form')->latest()->paginate(request()->input('per-page') ?? 20);
     }
 
     public function deleteAppliedForm($applied_form_id)
