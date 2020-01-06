@@ -21,6 +21,19 @@ $factory->define(Form::class, function (Faker $faker) {
             return factory(\App\Modules\Core\Language::class)->create()->id;
         },
         'slug' => $faker->slug,
-        'fields' => $faker->shuffleArray([random_int(0, 100), random_int(0, 100), random_int(0, 100)])
+        'fields' => [
+            [
+                'title' => $faker->title,
+                'fields' => [
+                    [
+                        'title' => $faker->title,
+                        'placeHolder' => $faker->word,
+                        'type' => $faker->word,
+                        'required' => $faker->boolean,
+                        'name' => $faker->word,
+                    ]
+                ]
+            ]
+        ],
     ];
 });
