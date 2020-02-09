@@ -20,7 +20,7 @@ class CreateFormSectionFieldsTable extends Migration
             $table->string('name');
             $table->string('placeholder')->default('');
             $table->string('type');
-            $table->text('options')->nullable()->default('[]');
+            $table->text('options');
             $table->boolean('disabled')->default(false);
             $table->unsignedInteger('weight')->default(0);
             $table->timestamps();
