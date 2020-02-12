@@ -18,3 +18,9 @@ Route::delete('applied-form/{applied_form_id}', 'FormController@deleteAppliedFor
 
 Route::get('applied-form-read/{applied_form_id}', 'FormController@setFormRead');
 Route::get('applied-form-file/{applied_form_id}/{field_name}', 'FormController@getAppliedFormFile');
+
+Route::put('formable/section/{section}', 'FormableController@putSection');
+Route::put('formable/field/{field}', 'FormableController@putFormSectionField');
+Route::put('formable/weights', 'FormableController@putSectionAndFieldWeights');
+Route::delete('formable/section/{section}', 'FormableController@deleteSection');
+Route::delete('formable/field/{field}', 'FormableController@deleteFormSectionField');
