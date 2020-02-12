@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Form;
+namespace App\Modules\Form\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +24,6 @@ class FormSection extends Model
 
     public function formFields()
     {
-        return $this->hasMany(FormSectionField::class, 'section_id');
+        return $this->hasMany(FormSectionField::class, 'section_id')->orderBy('weight', 'ASC');
     }
 }
