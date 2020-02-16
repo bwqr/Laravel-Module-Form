@@ -10,7 +10,7 @@ class FormSection extends Model
     public const SYSTEM_SECTION = 0b01;
 
     protected $fillable = [
-      'name', 'formable_id', 'formable_type', 'flags'
+      'name', 'formable_id', 'formable_type', 'flags', 'weight'
     ];
 
     protected $hidden = [
