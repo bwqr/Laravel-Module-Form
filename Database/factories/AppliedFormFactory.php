@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\Form\AppliedForm;
+use App\Modules\Form\Model\AppliedForm;
 use Faker\Generator as Faker;
 
 /*

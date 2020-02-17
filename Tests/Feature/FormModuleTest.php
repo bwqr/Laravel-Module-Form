@@ -6,8 +6,8 @@ namespace App\Modules\Form\Tests\Feature;
 
 use App\Modules\Core\Tests\TestCase;
 use App\Modules\Core\User;
-use App\Modules\Form\AppliedForm;
-use App\Modules\Form\Form;
+use App\Modules\Form\Model\AppliedForm;
+use App\Modules\Form\Model\Form;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

@@ -6,8 +6,8 @@ namespace App\Modules\Form\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Core\Language;
-use App\Modules\Form\AppliedForm;
-use App\Modules\Form\Form;
+use App\Modules\Form\Model\AppliedForm;
+use App\Modules\Form\Model\Form;
 use Illuminate\Support\Facades\Storage;
 
 class FormController extends Controller
