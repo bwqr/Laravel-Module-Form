@@ -47,8 +47,16 @@ class FormableController
         ]);
 
         DB::transaction(function () {
-            $this->updateWeights(FormSection::getModel()->getTable(), request()->input('sections'));
-            $this->updateWeights(FormSectionField::getModel()->getTable(), request()->input('form_fields'));
+            $sections = request()->input('sections');
+            $formFields = request()->input('form_fields');
+
+            if (count($sections) > 0) {
+                $this->updateWeights(FormSection::getModel()->getTable(), $sections);
+            }
+
+            if (count($formFields) > 0) {
+                $this->updateWeights(FormSectionField::getModel()->getTable(), $formFields);
+            }
         });
 
         return response()->json();
