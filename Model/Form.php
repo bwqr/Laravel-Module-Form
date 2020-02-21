@@ -16,12 +16,12 @@ class Form extends Model
 
     public function appliedForms()
     {
-        return $this->hasMany('App\\Modules\\Form\\AppliedForm');
+        return $this->hasMany(AppliedForm::class);
     }
 
     public function language()
     {
-        return $this->belongsTo('App\\Modules\\Core\\Language');
+        return $this->belongsTo(config('modules.namespace') . '\\Core\\Language');
     }
 
     public function scopeSlug($query, $slug)

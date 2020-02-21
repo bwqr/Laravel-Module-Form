@@ -16,6 +16,6 @@ class AppliedForm extends Model
 
     public function form()
     {
-        return $this->belongsTo('App\\Modules\\Form\\Form');
+        return $this->belongsTo(Form::class);
     }
 }
