@@ -19,7 +19,7 @@ class CreateFormSectionsTable extends Migration
             $table->unsignedInteger('formable_id');
             $table->string('formable_type');
             $table->unsignedInteger('weight')->default(0);
-            $table->unsignedInteger('flags');
+            $table->unsignedInteger('flags')->default(0);
             $table->timestamps();
         });
     }

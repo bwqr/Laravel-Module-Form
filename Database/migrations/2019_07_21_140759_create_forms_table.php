@@ -18,9 +18,9 @@ class CreateFormsTable extends Migration
             $table->string('name');
             $table->integer('language_id');
             $table->string('slug');
-            $table->text('fields');
             $table->timestamps();
             $table->unique(['language_id', 'slug']);
+            $table->foreign('language_id')->on('languages')->references('id');
         });
     }
 

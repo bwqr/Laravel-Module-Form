@@ -27,9 +27,9 @@ class FormController extends Controller
         return Form::with('language')->orderBy('slug')->paginate(request()->input('per-page') ?? 20);
     }
 
-    public function getForm($form_id)
+    public function getForm($slug)
     {
-        return Form::with('language')->findOrFail($form_id);
+        return Form::with(['language', 'sections.formFields'])->slug($slug)->firstOrFail();
     }
 
     public function getFormAppliedForms($form_id)
@@ -49,18 +49,30 @@ class FormController extends Controller
         request()->validate([
             'name' => 'required',
             'slug' => 'required',
-            'fields' => 'array',
             'language_id' => 'required'
         ]);
 
         Form::create(request()->only([
-            'name', 'slug', 'fields', 'language_id'
+            'name', 'slug', 'language_id'
         ]));
 
-        return response()->json([]);
+        return response()->json();
     }
 
-    public function putForm($form_id)
+    public function postFormSection(Form $form)
+    {
+        request()->validate([
+            'name' => 'required'
+        ]);
+
+        $form->sections()->create(request()->only([
+            'name'
+        ]));
+
+        return response()->json();
+    }
+
+    public function putForm(Form $form)
     {
         request()->validate([
             'name' => 'required',
@@ -68,18 +80,14 @@ class FormController extends Controller
             'language_id' => 'required'
         ]);
 
-        $form = Form::findOrFail($form_id);
-
-        $language = Language::findOrFail(request()->input('language_id'));
-
         $form->update(request()->only(['name', 'slug', 'language_id']));
 
         return response()->json();
     }
 
-    public function deleteForm($form_id)
+    public function deleteForm(Form $form)
     {
-        Form::findOrFail($form_id)->delete();
+        $form->delete();
 
         return response()->json([]);
     }
@@ -89,9 +97,9 @@ class FormController extends Controller
         return AppliedForm::with('form')->latest()->get();
     }
 
-    public function getAppliedForm($id)
+    public function getAppliedForm($applied_form_id)
     {
-        return AppliedForm::with('form')->findOrFail($id);
+        return AppliedForm::with('form')->findOrFail($applied_form_id);
     }
 
     public function getAppliedFormsPaginate()
@@ -99,19 +107,19 @@ class FormController extends Controller
         return AppliedForm::with('form')->latest()->paginate(request()->input('per-page') ?? 20);
     }
 
-    public function deleteAppliedForm($applied_form_id)
+    public function deleteAppliedForm(AppliedForm $appliedForm)
     {
-        AppliedForm::findOrFail($applied_form_id)->delete();
+        $appliedForm->delete();
 
         return response()->json();
     }
 
-    public function setFormRead($applied_form_id)
+    public function setAppliedFormRead($applied_form_id)
     {
         AppliedForm::findOrFail($applied_form_id)->update(['is_read' => 1]);
     }
 
-    public function getAppliedFormFile($applied_form_id, $field_name)
+    public function getAppliedFormFile($applied_form_id, $fieldId)
     {
         $applied_form = AppliedForm::findOrFail($applied_form_id);
 

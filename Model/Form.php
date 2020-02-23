@@ -24,6 +24,13 @@ class Form extends Model
         return $this->belongsTo(config('modules.namespace') . '\\Core\\Language');
     }
 
+    public function sections()
+    {
+        return $this->morphMany(FormSection::class, 'formable')->orderBy('weight', 'ASC');
+    }
+
+    public function 
+
     public function scopeSlug($query, $slug)
     {
         return $query->where('slug', $slug);

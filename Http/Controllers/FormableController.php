@@ -25,7 +25,24 @@ class FormableController
         return response()->json();
     }
 
-    public function putFormSectionField(FormSectionField $field)
+    public function postSectionField(FormSection $section)
+    {
+        request()->validate([
+            'name' => 'required',
+            'title' => 'required',
+            'placeholder' => 'required',
+            'type' => 'required',
+            'options' => 'array'
+        ]);
+
+        $section->formFields()->create(request()->only([
+            'name', 'title', 'placeholder', 'type', 'options'
+        ]));
+
+        return response()->json();
+    }
+
+    public function putSectionField(FormSectionField $field)
     {
         request()->validate([
             'title' => 'required',
@@ -69,7 +86,7 @@ class FormableController
         return response()->json();
     }
 
-    public function deleteFormSectionField(FormSectionField $field)
+    public function deleteSectionField(FormSectionField $field)
     {
         $field->delete();
 
