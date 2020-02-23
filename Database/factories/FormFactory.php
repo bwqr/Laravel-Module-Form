@@ -20,20 +20,6 @@ $factory->define(Form::class, function (Faker $faker) {
         'language_id' => static function() {
             return factory(\App\Modules\Core\Language::class)->create()->id;
         },
-        'slug' => $faker->slug,
-        'fields' => [
-            [
-                'title' => $faker->title,
-                'fields' => [
-                    [
-                        'title' => $faker->title,
-                        'placeHolder' => $faker->word,
-                        'type' => $faker->word,
-                        'required' => $faker->boolean,
-                        'name' => $faker->word,
-                    ]
-                ]
-            ]
-        ],
+        'slug' => $faker->slug
     ];
 });

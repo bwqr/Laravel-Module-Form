@@ -1,7 +1,6 @@
 <?php
 
-use App\Modules\Form\Model\AppliedForm;
-use App\Modules\Form\Model\Form;
+use App\Modules\Form\Model\FormSection;
 use Faker\Generator as Faker;
 
 /*
@@ -15,11 +14,8 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(AppliedForm::class, function (Faker $faker) {
+$factory->define(FormSection::class, function (Faker $faker) {
     return [
-        'form_id' => static function () {
-            return factory(Form::class)->create()->id;
-        },
-        'is_read' => $faker->boolean
+        'name' => $faker->word
     ];
 });

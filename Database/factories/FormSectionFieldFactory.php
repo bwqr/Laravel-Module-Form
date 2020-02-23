@@ -1,7 +1,6 @@
 <?php
 
-use App\Modules\Form\Model\AppliedForm;
-use App\Modules\Form\Model\Form;
+use App\Modules\Form\Model\FormSectionField;
 use Faker\Generator as Faker;
 
 /*
@@ -15,11 +14,12 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(AppliedForm::class, function (Faker $faker) {
+$factory->define(FormSectionField::class, function (Faker $faker) {
     return [
-        'form_id' => static function () {
-            return factory(Form::class)->create()->id;
-        },
-        'is_read' => $faker->boolean
+        'title' => $faker->word,
+        'name' => $faker->randomAscii,
+        'placeholder' => $faker->word,
+        'type' => 'Text',
+        'options' => []
     ];
 });

@@ -8,6 +8,8 @@ use App\Modules\Core\Tests\TestCase;
 use App\Modules\Core\User;
 use App\Modules\Form\Model\AppliedForm;
 use App\Modules\Form\Model\Form;
+use App\Modules\Form\Model\FormSection;
+use App\Modules\Form\Model\FormSectionField;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,14 +34,14 @@ class FormModuleTest extends TestCase
         $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form_id}/applied-forms'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form_id}/applied-forms/paginate'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'form', 'post'));
-        $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form_id}', 'put'));
-        $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form_id}', 'delete'));
+        $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form}', 'put'));
+        $this->assertTrue($this->checkRoute($this->formRoute . 'form/{form}', 'delete'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'applied-forms'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'applied-forms/paginate'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form/{applied_form_id}'));
-        $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form/{applied_form_id}', 'delete'));
+        $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form/{appliedForm}', 'delete'));
         $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form-read/{applied_form_id}'));
-        $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form-file/{applied_form_id}/{field_name}'));
+        $this->assertTrue($this->checkRoute($this->formRoute . 'applied-form-file/{applied_form_id}/{field_id}'));
     }
 
     public function testGetForms(): void
@@ -142,17 +144,21 @@ class FormModuleTest extends TestCase
 
         $fileName = 'test';
 
-        $fieldName = 'test';
+        $appliedForm = factory(AppliedForm::class)->create();
 
-        $appliedForm = factory(AppliedForm::class)->create([
-            'values' => [$fieldName => $fileName]
+        $formField = $appliedForm->form->sections()->create(factory(FormSection::class)->make()->toArray())
+            ->formFields()->create(factory(FormSectionField::class)->make()->toArray());
+
+        $appliedForm->values()->create([
+            'field_id' => $formField->id,
+            'value' => $fileName
         ]);
 
         $path = Storage::disk('local')->path("forms/{$appliedForm->id}");
 
         UploadedFile::fake()->create($fileName, 128)->move($path, $fileName);
 
-        $response =$this->actingAs($this->user)->get($this->formRoute . "applied-form-file/{$appliedForm->id}/{$fieldName}");
+        $response =$this->actingAs($this->user)->get($this->formRoute . "applied-form-file/{$appliedForm->id}/{$formField->id}");
 
         $response->assertStatus(200);
     }
@@ -163,17 +169,23 @@ class FormModuleTest extends TestCase
 
         $fileName = 'test';
 
-        $fieldName = 'test';
+        $appliedForm = factory(AppliedForm::class)->create();
 
-        $appliedForm = factory(AppliedForm::class)->create([
-            'values' => [$fieldName . 'test' => $fileName]
+        $formField = $appliedForm->form->sections()->create(factory(FormSection::class)->make()->toArray())
+            ->formFields()->create(factory(FormSectionField::class)->make()->toArray());
+
+        $appliedForm->values()->create([
+            'field_id' => $formField->id,
+            'value' => $fileName
         ]);
 
         $path = Storage::disk('local')->path("forms/{$appliedForm->id}");
 
         UploadedFile::fake()->create($fileName, 128)->move($path, $fileName);
 
-        $response =$this->actingAs($this->user)->get($this->formRoute . "applied-form-file/{$appliedForm->id}/{$fieldName}");
+        $wrongId = $formField->id + 2;
+
+        $response =$this->actingAs($this->user)->get($this->formRoute . "applied-form-file/{$appliedForm->id}/{$wrongId}");
 
         $response->assertStatus(404);
     }
