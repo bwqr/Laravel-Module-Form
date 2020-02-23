@@ -15,14 +15,14 @@ class NewFormApplied extends Mailable
 
     public $values;
 
-    public $sections;
+    public $formFields;
 
     public $formName;
 
-    public function __construct($values, $sections, $formName)
+    public function __construct($values, $formFields, $formName)
     {
         $this->values = $values;
-        $this->sections = $sections;
+        $this->formFields = $formFields;
         $this->formName = $formName;
     }
 
@@ -30,7 +30,7 @@ class NewFormApplied extends Mailable
     {
         return $this->view('emails.form-created')->with([
             'values' => $this->values,
-            'sections' => $this->sections,
+            'formFields' => $this->formFields,
             'title' => Lang::get('form.email', ['formName' => $this->formName])
         ]);
     }

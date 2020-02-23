@@ -29,7 +29,11 @@ class Form extends Model
         return $this->morphMany(FormSection::class, 'formable')->orderBy('weight', 'ASC');
     }
 
-    public function 
+    public function formFields()
+    {
+        return $this->hasManyThrough(FormSectionField::class, FormSection::class, 'formable_id', 'section_id')
+            ->where('formable_type', Form::class)->orderBy('weight', 'ASC');
+    }
 
     public function scopeSlug($query, $slug)
     {

@@ -18,4 +18,9 @@ class AppliedForm extends Model
     {
         return $this->belongsTo(Form::class);
     }
+
+    public function values()
+    {
+        return $this->morphMany(FormSubmission::class, 'formable');
+    }
 }

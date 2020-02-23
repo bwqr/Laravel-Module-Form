@@ -17,7 +17,6 @@ class CreateAppliedFormsTable extends Migration
             $table->increments('id');
             $table->integer('form_id');
             $table->boolean('is_read')->default(false);
-            $table->text('values');
             $table->timestamps();
         });
     }

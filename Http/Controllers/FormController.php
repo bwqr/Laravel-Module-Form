@@ -27,9 +27,9 @@ class FormController extends Controller
         return Form::with('language')->orderBy('slug')->paginate(request()->input('per-page') ?? 20);
     }
 
-    public function getForm($slug)
+    public function getForm($formId)
     {
-        return Form::with(['language', 'sections.formFields'])->slug($slug)->firstOrFail();
+        return Form::with(['language', 'sections.formFields'])->findOrFail($formId);
     }
 
     public function getFormAppliedForms($form_id)
@@ -94,12 +94,12 @@ class FormController extends Controller
 
     public function getAppliedForms()
     {
-        return AppliedForm::with('form')->latest()->get();
+        return AppliedForm::with(['form'])->latest()->get();
     }
 
     public function getAppliedForm($applied_form_id)
     {
-        return AppliedForm::with('form')->findOrFail($applied_form_id);
+        return AppliedForm::with(['form.formFields', 'values'])->findOrFail($applied_form_id);
     }
 
     public function getAppliedFormsPaginate()
@@ -121,13 +121,9 @@ class FormController extends Controller
 
     public function getAppliedFormFile($applied_form_id, $fieldId)
     {
-        $applied_form = AppliedForm::findOrFail($applied_form_id);
+        $value = AppliedForm::findOrFail($applied_form_id)->values()->where('field_id', $fieldId)->firstOrFail();
 
-        if (!array_key_exists($field_name, $applied_form->values)) {
-            abort(404);
-        }
-
-        $file_path = Storage::disk('local')->path("forms/{$applied_form->id}/{$applied_form->values[$field_name]}");
+        $file_path = Storage::disk('local')->path("forms/{$applied_form_id}/{$value->value}");
 
         return response()->file($file_path);
     }
