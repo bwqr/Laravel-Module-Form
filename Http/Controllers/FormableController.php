@@ -47,11 +47,12 @@ class FormableController
         request()->validate([
             'title' => 'required',
             'placeholder' => 'required',
-            'section_id' => 'required'
+            'section_id' => 'required',
+            'type' => 'required'
         ]);
 
         $field->update(request()->only([
-            'title', 'placeholder', 'disabled', 'section_id'
+            'title', 'placeholder', 'disabled', 'section_id', 'type'
         ]));
 
         return response()->json();
