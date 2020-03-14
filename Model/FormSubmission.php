@@ -14,4 +14,9 @@ class FormSubmission extends Model
     {
         return $this->morphTo();
     }
+
+    public function formField()
+    {
+        return $this->hasOne(FormSectionField::class, 'id', 'field_id');
+    }
 }
