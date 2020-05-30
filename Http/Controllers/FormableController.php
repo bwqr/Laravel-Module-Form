@@ -32,11 +32,12 @@ class FormableController
             'title' => 'required',
             'placeholder' => 'required',
             'type' => 'required',
-            'options' => 'array'
+            'options' => 'array',
+            'required' => 'required'
         ]);
 
         $section->formFields()->create(request()->only([
-            'name', 'title', 'placeholder', 'type', 'options'
+            'name', 'title', 'placeholder', 'type', 'options', 'required'
         ]));
 
         return response()->json();
@@ -48,11 +49,12 @@ class FormableController
             'title' => 'required',
             'placeholder' => 'required',
             'section_id' => 'required',
-            'type' => 'required'
+            'type' => 'required',
+            'required' => 'required'
         ]);
 
         $field->update(request()->only([
-            'title', 'placeholder', 'disabled', 'section_id', 'type'
+            'title', 'placeholder', 'disabled', 'section_id', 'type', 'required'
         ]));
 
         return response()->json();

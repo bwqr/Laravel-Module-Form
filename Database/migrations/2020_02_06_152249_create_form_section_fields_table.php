@@ -22,6 +22,7 @@ class CreateFormSectionFieldsTable extends Migration
             $table->string('type');
             $table->text('options');
             $table->boolean('disabled')->default(false);
+            $table->boolean('required')->default(true);
             $table->unsignedInteger('weight')->default(0);
             $table->timestamps();
             $table->foreign('section_id')->on('form_sections')->references('id')->onDelete('cascade');

@@ -20,6 +20,7 @@ $factory->define(FormSectionField::class, function (Faker $faker) {
         'name' => $faker->randomAscii,
         'placeholder' => $faker->word,
         'type' => 'Text',
-        'options' => []
+        'options' => [],
+        'required' => true
     ];
 });
