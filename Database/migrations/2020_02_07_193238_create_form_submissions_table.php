@@ -18,7 +18,7 @@ class CreateFormSubmissionsTable extends Migration
             $table->unsignedInteger('field_id');
             $table->unsignedInteger('formable_id');
             $table->string('formable_type');
-            $table->string('value');
+            $table->text('value');
             $table->timestamps();
             $table->foreign('field_id')->on('form_section_fields')->references('id');
             $table->unique(['field_id', 'formable_id', 'formable_type']);
